@@ -1,0 +1,11 @@
+﻿<div class="items-container">
+    @foreach (var item in Items)
+    {
+        <div class="card p-2 my-2 bg-light">@item.Description</div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public IEnumerable<RetrospectiveItem> Items { get; set; } = new List<RetrospectiveItem>();
+}

@@ -1,0 +1,22 @@
+﻿<div class="form-group">
+    <textarea class="form-control" rows="2" @bind="description" placeholder="Enter a new item" ></textarea>
+    <button class="btn btn-primary my-1" @onclick="AddItem">Add</button>
+</div>
+
+@code {
+    public string description = string.Empty;
+
+    [Parameter]
+    public ItemType ItemType { get; set; }
+
+    [Parameter]
+    public EventCallback<RetrospectiveItem> OnAddItem { get; set; }
+
+    async Task AddItem()
+    {
+        if (string.IsNullOrEmpty(description)) return;
+
+        await OnAddItem.InvokeAsync(new RetrospectiveItem { Description = description, Type = ItemType });
+        description = string.Empty;
+    }
+}

@@ -1,0 +1,60 @@
+﻿@page "/"
+@using BlazorTeamRetro.Client.Services
+@inject SignalRService SignalRService
+@implements IAsyncDisposable
+
+<h3 class="h3 mt-2">Retrospective Board</h3>
+<p> @participants Participants</p>
+<div class="row mt-4">
+    <BoardColumn Title="What Went Well"
+                 ItemType="ItemType.WhatWentWell"
+                 Items="retrospectiveItems"
+                 OnAddItem="Add" />
+
+    <BoardColumn Title="What Could Be Improved"
+                 ItemType="ItemType.WhatCouldBeImproved"
+                 Items="retrospectiveItems"
+                 OnAddItem="Add" />
+
+    <BoardColumn Title="Action Items"
+                 ItemType="ItemType.ActionItem"
+                 Items="retrospectiveItems"
+                 OnAddItem="Add" />
+</div>
+
+@code {
+    int participants;
+    private List<RetrospectiveItem> retrospectiveItems = new List<RetrospectiveItem>();
+
+    private async void Add(RetrospectiveItem retrospectiveItem)
+    {
+        await SignalRService.SendMessage(retrospectiveItem);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        SignalRService.OnUpdateClientsCount += OnUpdateClientsCount;
+        SignalRService.OnItemReceived += OnItemReceived;
+        await SignalRService.StartConnection();
+    }
+
+    void OnUpdateClientsCount(int count)
+    {
+        participants = count;
+        StateHasChanged();
+    }
+
+    void OnItemReceived(RetrospectiveItem item)
+    {
+        retrospectiveItems.Add(item);
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        SignalRService.OnItemReceived -= OnItemReceived;
+        SignalRService.OnUpdateClientsCount -= OnUpdateClientsCount;
+        await SignalRService.DisposeAsync();
+    }
+}
+
