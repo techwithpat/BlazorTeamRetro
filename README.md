@@ -32,17 +32,13 @@ To set up the application locally and explore the real-time features, follow the
 1. Clone the repository to your local machine.
 2. Open the solution in Visual Studio or your preferred code editor.
 3. Build the solution to restore NuGet packages and dependencies.
-4. Start the server projects.
+4. Start the server project.
 
 ## Dependencies
 
-- .NET 7 and Web Developement Workload
+- .NET 7 and Web Development Workload
 
 Make sure to have the required runtime and SDK versions installed to run the application smoothly.
-
-## Contributions
-
-We welcome contributions to improve the functionality and features of the application. If you encounter any issues or have ideas for enhancements, please open an issue or submit a pull request.
 
 ## License
 
